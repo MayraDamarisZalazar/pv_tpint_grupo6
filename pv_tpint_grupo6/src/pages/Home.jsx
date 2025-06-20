@@ -1,28 +1,40 @@
-import { useContext } from "react";
-import ProductCard from "../components/ProductCard";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
+import ProductCard from "../components/ProductCard";
 
 const Home = () => {
-  const { products, favorites, toggleFavorite } = useContext(AppContext);
+  const { products, setProducts, toggleFavorite } = useContext(AppContext);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("https://fakestoreapi.com/products");
+        const data = await res.json();
+        const productsWithFavorites = data.map(product => ({
+          ...product,
+          isFavorite: false
+        }));
+        setProducts(productsWithFavorites);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, [setProducts]);
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Listado de Productos</h1>
-
-      {products.length === 0 ? (
-        <p>Cargando productos...</p>
-      ) : (
-        <div className="flex flex-wrap gap-6">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              isFavorite={favorites.includes(product.id)}
-              onToggleFavorite={toggleFavorite}
-            />
-          ))}
-        </div>
-      )}
+    <div className="home">
+      <h1>Productos</h1>
+      <div className="product-grid">
+        {products.map(product => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            toggleFavorite={toggleFavorite}
+          />
+        ))}
+      </div>
     </div>
   );
 };

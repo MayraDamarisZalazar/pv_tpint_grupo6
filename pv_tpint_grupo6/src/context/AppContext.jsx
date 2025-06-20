@@ -1,28 +1,19 @@
-import { createContext, useEffect, useState } from "react";
-import axios from "axios";
+import { createContext, useState } from "react";
 
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
-  const [favorites, setFavorites] = useState([]);
-
-  useEffect(() => {
-    axios.get("https://fakestoreapi.com/products").then((res) => {
-      setProducts(res.data);
-    });
-  }, []);
 
   const toggleFavorite = (id) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]
+    const updated = products.map(product =>
+      product.id === id ? { ...product, isFavorite: !product.isFavorite } : product
     );
+    setProducts(updated);
   };
 
   return (
-    <AppContext.Provider
-      value={{ products, favorites, toggleFavorite }}
-    >
+    <AppContext.Provider value={{ products, setProducts, toggleFavorite }}>
       {children}
     </AppContext.Provider>
   );
