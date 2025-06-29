@@ -1,29 +1,22 @@
-import { useContext } from "react";
-import { AppContext } from "../context/AppContext";
+import { useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
 
 const Favorites = () => {
-  const { products, toggleFavorite } = useContext(AppContext);
-
-  // Filtra solo los productos marcados como favoritos
+  const products = useSelector(state => state.products.products) || [];
   const favoriteProducts = products.filter(product => product.isFavorite);
 
   return (
     <div className="favorites">
-      <h1>Mis Favoritos</h1>
-      {favoriteProducts.length === 0 ? (
-        <p>No tienes productos favoritos aún.</p>
-      ) : (
-        <div className="product-grid">
-          {favoriteProducts.map(product => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              toggleFavorite={toggleFavorite}
-            />
-          ))}
-        </div>
-      )}
+      <h1>Productos Favoritos</h1>
+      <div className="product-grid">
+        {favoriteProducts.length > 0 ? (
+          favoriteProducts.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))
+        ) : (
+          <p>No hay productos favoritos.</p>
+        )}
+      </div>
     </div>
   );
 };
