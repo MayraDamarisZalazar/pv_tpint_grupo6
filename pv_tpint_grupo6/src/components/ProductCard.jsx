@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const ProductCard = ({ product, toggleFavorite }) => {
   return (
     <div className="product-card">
@@ -8,7 +10,10 @@ const ProductCard = ({ product, toggleFavorite }) => {
       <button onClick={() => toggleFavorite(product.id)}>
         {product.isFavorite ? "💖" : "🤍"}
       </button>
-      <button>Ver más detalles</button>
+      <Link to={`/product/${product.id}`}>
+        <button>Ver más detalles</button>
+      </Link>
+
     </div>
   );
 };
