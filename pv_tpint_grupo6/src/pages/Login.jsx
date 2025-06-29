@@ -1,11 +1,17 @@
 import { useState } from "react"; 
 import { useDispatch } from "react-redux"; 
 import { useNavigate } from "react-router-dom"; 
+
 const Login = () => { 
+
 const [form, setForm] = useState({ email: "", password: "" }); 
-const dispatch = useDispatch(); 
+
+const dispatch = useDispatch();
+
 const navigate = useNavigate(); 
+
 const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value }); 
+
 const handleSubmit = (e) => { 
 e.preventDefault(); 
 const users = JSON.parse(localStorage.getItem("users")) || []; 
@@ -25,4 +31,6 @@ onChange={handleChange} required />
 </form> 
 ); 
 }; 
+
+
 export default Login;
